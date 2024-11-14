@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Learner {
+  id           Int       @id @default(autoincrement())
+  employeeNumber String    @unique
+  name          String
+  surname       String
+  image         String?   // Optional, in case no image is available
+  cohort        String
+  date          DateTime  @default(now())
+  geolocation   String    // Store as JSON or text if using GeoJSON data
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+}
+// Admin model for managing admin users with roles and permissions
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      String   @default("admin") // Possible roles: "admin", "super_admin", etc.
+  createdAt DateTime @default(now())
+}
