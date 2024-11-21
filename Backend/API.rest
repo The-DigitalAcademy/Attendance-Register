@@ -1,11 +1,13 @@
 ##Admin register 
-POST http://localhost:3000/admin/register
+POST http://localhost:35050/auth/admin/register content-type: application/json
 {
   "email": "admin1@shaper.co.za",
   "password": "@dmin@dmin@10001"
 }
+
 ##Admin login 
-POST http://localhost:3000/admin/login
+
+ POST http://localhost:35050/auth/admin/login content-type: application/json
 {
   "email": "admin1@shaper.co.za",
   "password": "@dmin@dmin@10001"
@@ -14,9 +16,10 @@ POST http://localhost:3000/admin/login
 
 
 ##Admin create a user with admin Auth Token
-POST http://localhost:3000/admin/create
+
+POST http://localhost:35050/admin/create
 {
-  "employeeNumber": "S12344",
+  "employeeNumber": "S1234ee4",
   "name": "Jane",
   "surname": "Doe",
   "image": "https://media.licdn.com/dms/image/v2/D4D03AQFW8F_Pr4ZUdw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1723014220590?e=1736985600&v=beta&t=0gfSMF_75P5KRde507O6Zju6b8eVgnKRvnWH20d7KvI",
@@ -25,3 +28,14 @@ POST http://localhost:3000/admin/create
   }
 
 
+
+
+Learner check in 
+POST http://localhost:35050/learner/checkin HTTP/1.1
+Host: localhost:35050
+Content-Type: application/json
+
+{
+  "employeeNumber": "S12345",
+  "geolocation": "{\"latitude\":40.7128,\"longitude\":-74.0060}"
+}
