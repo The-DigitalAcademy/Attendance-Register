@@ -39,19 +39,19 @@ app.post('/learners/newlearners',  authenticateAdminToken, authorizeRole('admin'
   }
 });
 // Get all learners
-app.get('/learners', authenticateToken, async (req, res) => {
+app.get('/learners', authorizeRole, async (req, res) => {
   const learners = await prisma.learner.findMany();
   res.json(learners);
 });
 // Get a single learner
-app.get('/learner/:employeeNumber', authenticateToken, async (req, res) => {
+app.get('/learner/:employeeNumber', authorizeRole, async (req, res) => {
   const { employeeNumber } = req.params;
   const learner = await prisma.learner.findUnique({
     where:  {employeeNumber: employeeNumber},
   });
   res.json(learner);
 });
-app.put('/learner/:employeeNumber', authenticateToken, async (req, res) => {
+app.put('/learner/:employeeNumber', authorizeRole, async (req, res) => {
   const { employeeNumber, name, surname, image, cohort, geolocation } = req.body;
   try {
     const learner = await prisma.learner.update({
