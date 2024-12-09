@@ -1,22 +1,21 @@
-##Admin register 
-POST http://localhost:35050/auth/admin/register content-type: application/json
+### Admin register ##
+POST https://attendance-register-bpp3.onrender.com/auth/admin/register content-type: application/json
 {
-  "email": "admin1@shaper.co.za",
-  "password": "@dmin@dmin@10001"
+  "email": "admin@example.com",
+  "password": "secure_password",
+  "role": "admin"
 }
 
-##Admin login 
-
- POST http://localhost:35050/auth/admin/login content-type: application/json
+#### Admin login ###
+POST https://attendance-register-bpp3.onrender.com/auth/admin/login  content-type: application/json
 {
   "email": "admin1@shaper.co.za",
-  "password": "@dmin@dmin@10001"
+  "password": "Admin@1001"
 }
 
 
 
-##Admin create a user with admin Auth Token
-
+### Admin create a user with admin Auth Token ###
 POST http://localhost:35050/admin/create
 {
   "employeeNumber": "S1234ee4",
@@ -30,7 +29,7 @@ POST http://localhost:35050/admin/create
 
 
 
-Learner check in 
+### Learner check in ###
 POST http://localhost:35050/learner/checkin HTTP/1.1
 Host: localhost:35050
 Content-Type: application/json

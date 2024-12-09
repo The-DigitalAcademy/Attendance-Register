@@ -36,3 +36,39 @@ exports.loginAdmin = async (req, res) => {
     res.status(500).json({ message: 'Error logging in', error });
   }
 };
+
+
+exports.getAdmins=async (req, res) => {
+  try {
+    const admins = await prisma.admin.findMany();
+    res.json(admins);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching admins', error });
+  }
+}
+
+exports.deleteAdmins = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.admin.delete({ where: { id: parseInt(id, 10) } });
+    res.json({ message: 'Admin deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting admin', error });
+  }
+}
+
+exports.updateAdminRole =  async (req, res) => {
+  const { id } = req.params;
+  const { role } = req.body;
+
+  try {
+    const updatedAdmin = await prisma.admin.update({
+      where: { id: parseInt(id, 10) },
+      data: { role },
+    });
+    res.json({ message: 'Admin role updated successfully', updatedAdmin });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating role', error });
+  }
+}
