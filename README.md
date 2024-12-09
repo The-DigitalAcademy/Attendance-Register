@@ -30,7 +30,7 @@ Node.js (v14 or later) \
 PostgreSQL or another Prisma-supported database \
 Prisma CLI (npx can also work) \
 Setup  
-1. Clone the Repository \
+1. Clone the Repository 
 
 # ADMIN User Stories
   Get all learners \
