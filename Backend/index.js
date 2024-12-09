@@ -12,6 +12,14 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 
+function authorizeRole(role) {
+  return (req, res, next) => {
+    if (req.admin.role !== role) {
+      return res.status(403).json({ message: 'Forbidden: You do not have the required permissions' });
+    }
+    next();
+  };
+}
 // Routes
 app.use('/admin', adminRoutes);
 app.use('/learners', learnerRoutes);
