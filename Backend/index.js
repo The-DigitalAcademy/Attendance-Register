@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const adminRoutes = require('./src/routes/adminRoutes');
 const learnerRoutes = require('./src/routes/learnerRoutes');
-
+const { authenticateAdminToken, authorizeRole } = require('../middleware/authMiddleware');
 const app = express();
 
 // Middleware
