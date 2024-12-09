@@ -7,11 +7,11 @@ A Node.js backend application built with Express and Prisma to manage admins, le
 Admin Registration: Add new admins with hashed passwords. \
 Admin Login: Authenticate admins and issue JWT tokens.\
 Role-Based Access Control: Support for roles such as admin and super_admin.\
-Admin CRUD: View, update roles, and delete admin accounts (restricted to super_admin).\
+Admin CRUD: View, update roles, and delete admin accounts (restricted to super_admin).
 
-# Learner Management \
+# Learner Management 
 Learner Records: CRUD operations for learners, including geolocation and cohort data. \
-Attendance Management: Track learners' attendance records with geolocation and timestamps. \
+Attendance Management: Track learners' attendance records with geolocation and timestamps. 
 
 # Program Management
 Programs: Define and manage programs, cohorts, and learner counts. \
@@ -21,15 +21,15 @@ Express: Web framework for route handling. \
 Prisma: ORM for database management. \
 PostgreSQL: Database for persisting data. \
 JWT: Token-based authentication. \
-bcryptjs: Secure password hashing. \
+bcryptjs: Secure password hashing. 
 
 # Prerequisites
-Before starting, ensure you have the following installed: \
+Before starting, ensure you have the following installed: 
 
 Node.js (v14 or later) \
 PostgreSQL or another Prisma-supported database \
 Prisma CLI (npx can also work) \
-Setup  \
+Setup  
 1. Clone the Repository \
 
 # ADMIN User Stories
@@ -39,5 +39,5 @@ Setup  \
  how many times NOT  Checked In and Checked \
 Get all learner by cohort \
 Get all Checked in by cohort \
-Get all NOT CheckedIn by cohort \
+Get all NOT CheckedIn by cohort 
 
