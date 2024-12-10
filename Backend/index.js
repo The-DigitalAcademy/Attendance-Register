@@ -4,6 +4,7 @@ const path = require('path');
 const adminRoutes = require('./src/routes/adminRoutes');
 const learnerRoutes = require('./src/routes/learnerRoutes');
 const { authenticateAdminToken } = require('./src/middleware/authMiddleware');
+const prisma = require("./model")
 const app = express();
 
 // Middleware
@@ -26,7 +27,7 @@ app.use('/learners', learnerRoutes);
 
 
 // Create a new learner
-app.post('/learners/newlearners',  authenticateAdminToken, authorizeRole('admin'),
+app.post('/learners/newlearner',  authenticateAdminToken, authorizeRole('admin'),
  async (req, res) => {
   const { employeeNumber, name, surname, email, contactNo, emergencyNo, cohort, geolocation } = req.body;
   try{
@@ -51,7 +52,7 @@ app.get('/learner/:employeeNumber', authorizeRole, async (req, res) => {
   });
   res.json(learner);
 });
-app.put('/learner/:employeeNumber', authorizeRole, async (req, res) => {
+app.put('/learner/:employeeNumber', authenticateAdminToken, authorizeRole('admin'), async (req, res) => {
   const { employeeNumber, name, surname, image, cohort, geolocation } = req.body;
   try {
     const learner = await prisma.learner.update({
@@ -64,7 +65,7 @@ app.put('/learner/:employeeNumber', authorizeRole, async (req, res) => {
   }
 });
 // Route to soft delete a learner using employeeNumber
-app.put('/admin/learner/soft-delete/:employeeNumber', authenticateAdminToken, async (req, res) => {
+app.put('/admin/learner/soft-delete/:employeeNumber',  authenticateAdminToken, authorizeRole('admin'), async (req, res) => {
   const { employeeNumber } = req.params; // Get the employeeNumber from the route parameters
   
   try {
@@ -88,7 +89,7 @@ app.put('/admin/learner/soft-delete/:employeeNumber', authenticateAdminToken, as
     res.status(500).json({ error: 'Error soft deleting learner' });
   }
 });
-app.get('/admin/dashboard', authenticateAdminToken, async (req, res) => {
+app.get('/admin/dashboard', authenticateAdminToken, authorizeRole('admin'), async (req, res) => {
   try {
     const { active } = req.query; // Read `active` parameter from query string (e.g., ?active=true)
     
@@ -123,7 +124,7 @@ app.get('/admin/dashboard', authenticateAdminToken, async (req, res) => {
   }
 });
 //Get learner by check in
-app.get('/learner/:employeeNumber/attendance', async (req, res) => {
+app.get('/learner/:employeeNumber/attendance', authenticateAdminToken, authorizeRole('admin'), async (req, res) => {
   const { employeeNumber } = req.params;
   try {
     // Fetch total expected check-ins for the cohort/program
@@ -156,7 +157,7 @@ app.get('/learner/:employeeNumber/attendance', async (req, res) => {
   }
 });
 //Get a learner by employeeNumnber and month of attendance
-app.get('/learner/:employeeNumber/attendance/:month', async (req, res) => {
+app.get('/learner/:employeeNumber/attendance/:month',  authenticateAdminToken, authorizeRole('admin'), async (req, res) => {
   const { employeeNumber, month } = req.params;
   try {
     // Parse the current year and the month from the request
@@ -189,11 +190,8 @@ app.get('/learner/:employeeNumber/attendance/:month', async (req, res) => {
     res.status(500).json({ message: 'Error fetching attendance data', error });
   }
 });
-// Serve the admin dashboard page
-app.get('/dashboard', authenticateAdminToken, async (req, res) => {
-  const learners = await prisma.learner.findMany();
-  res.render('dashboard', { learners });
-});
+
+
 app.get('/admins', authenticateAdminToken, authorizeRole('super_admin'), async (req, res) => {
   try {
     const admins = await prisma.admin.findMany();
@@ -216,7 +214,7 @@ app.put('/admin/role/:id', authenticateAdminToken, authorizeRole('super_admin'),
   }
 });
 // Check-in Route for Learners by employeeNumber
-app.post('/checkin', async (req, res) => {
+app.post('/learner/checkin', async (req, res) => {
   const { employeeNumber, geolocation } = req.body;
   // Validate input
   if (!employeeNumber || !geolocation) {
@@ -275,5 +273,6 @@ app.use((err, req, res, next) => {
 // Start server
 const PORT = process.env.PORT || 35050;
 app.listen(PORT, () => {
+  
   console.log(`Server running on http://localhost:${PORT}`);
 });
