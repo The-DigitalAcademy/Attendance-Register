@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const adminRoutes = require('./src/routes/adminRoutes');
 const learnerRoutes = require('./src/routes/learnerRoutes');
-const { authenticateAdminToken } = require('./src/middleware/authMiddleware');
+const { authenticateAdminToken, authorizeRole } = require('./src/middleware/authMiddleware');
 const prisma = require("./model")
 const app = express();
 
@@ -13,14 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 
-function authorizeRole(role) {
-  return (req, res, next) => {
-    if (req.admin.role !== role) {
-      return res.status(403).json({ message: 'Forbidden: You do not have the required permissions' });
-    }
-    next();
-  };
-}
+
 // Routes
 app.use('/admin', adminRoutes);
 app.use('/learners', learnerRoutes);
@@ -40,19 +33,19 @@ app.post('/learners/newlearner',  authenticateAdminToken, authorizeRole('admin')
   }
 });
 // Get all learners
-app.get('/learners', authorizeRole('admin'), async (req, res) => {
+app.get('/learners', authenticateAdminToken, authorizeRole('admin', 'super_admin'), async (req, res) => {
   const learners = await prisma.learner.findMany();
   res.json(learners);
 });
 // Get a single learner
-app.get('/learner/:employeeNumber', authorizeRole('admin'), async (req, res) => {
+app.get('/learner/:employeeNumber', authenticateAdminToken, authorizeRole('admin', 'super_admin'), async (req, res) => {
   const { employeeNumber } = req.params;
   const learner = await prisma.learner.findUnique({
     where:  {employeeNumber: employeeNumber},
   });
   res.json(learner);
 });
-app.put('/learner/:employeeNumber', authenticateAdminToken, authorizeRole('admin'), async (req, res) => {
+app.put('/learner/:employeeNumber', authenticateAdminToken, authorizeRole('admin', 'super_admin'), async (req, res) => {
   const { employeeNumber, name, surname, image, cohort, geolocation } = req.body;
   try {
     const learner = await prisma.learner.update({
@@ -65,7 +58,7 @@ app.put('/learner/:employeeNumber', authenticateAdminToken, authorizeRole('admin
   }
 });
 // Route to soft delete a learner using employeeNumber
-app.put('/admin/learner/soft-delete/:employeeNumber',  authenticateAdminToken, authorizeRole('admin'), async (req, res) => {
+app.put('/admin/learner/soft-delete/:employeeNumber',  authenticateAdminToken, authorizeRole('admin', 'super_admin'), async (req, res) => {
   const { employeeNumber } = req.params; // Get the employeeNumber from the route parameters
   
   try {
@@ -89,7 +82,7 @@ app.put('/admin/learner/soft-delete/:employeeNumber',  authenticateAdminToken, a
     res.status(500).json({ error: 'Error soft deleting learner' });
   }
 });
-app.get('/admin/dashboard', authenticateAdminToken, authorizeRole('admin'), async (req, res) => {
+app.get('/admin/dashboard', authenticateAdminToken, authorizeRole('admin', 'super_admin'), async (req, res) => {
   try {
     const { active } = req.query; // Read `active` parameter from query string (e.g., ?active=true)
     
@@ -99,18 +92,29 @@ app.get('/admin/dashboard', authenticateAdminToken, authorizeRole('admin'), asyn
     // Fetch learners who are active in the programme
     const activeLearners = await prisma.learner.findMany({
       where: {
-        isActive: isActive, // Filtering based on the isActive boolean field
+        isActive: true // Filtering based on the isActive boolean field
       },
     });
-    // Fetch all programmes (if needed)
+    const inActiveLearners = await prisma.learner.findMany({
+      where: {
+        isActive: false // Filtering based on the isActive boolean field
+      },
+    });
+    // Fetch all programmes 
     const programmes = await prisma.programme.findMany();
-    // Fetch all admins (if needed)
+    // Fetch all admins
     const admins = await prisma.admin.findMany();
+
     // Return a list of all data
     res.json({
-      totalLearners: activeLearners.length,
-      allLearners: activeLearners,
+      //allLearners: allLearners,
+      totalLearners: activeLearners? activeLearners.length : 0,
+      activeLearners: activeLearners,
+      totalActiveLearners: activeLearners.length,
+      inActiveLearners: inActiveLearners,
+      allProgrammes: programmes,
       totalProgrammes: programmes ? programmes.length : 0,
+      allAdmins: admins,
       totalAdmins: admins ? admins.length : 0,
     });
     
@@ -124,7 +128,7 @@ app.get('/admin/dashboard', authenticateAdminToken, authorizeRole('admin'), asyn
   }
 });
 //Get learner by check in
-app.get('/learner/:employeeNumber/attendance', authenticateAdminToken, authorizeRole('admin'), async (req, res) => {
+app.get('/learner/:employeeNumber/attendance', authenticateAdminToken, authorizeRole('admin', 'super_admin'), async (req, res) => {
   const { employeeNumber } = req.params;
   try {
     // Fetch total expected check-ins for the cohort/program
@@ -157,7 +161,7 @@ app.get('/learner/:employeeNumber/attendance', authenticateAdminToken, authorize
   }
 });
 //Get a learner by employeeNumnber and month of attendance
-app.get('/learner/:employeeNumber/attendance/:month',  authenticateAdminToken, authorizeRole('admin'), async (req, res) => {
+app.get('/learner/:employeeNumber/attendance/:month',  authenticateAdminToken, authorizeRole('admin', 'super_admin'), async (req, res) => {
   const { employeeNumber, month } = req.params;
   try {
     // Parse the current year and the month from the request

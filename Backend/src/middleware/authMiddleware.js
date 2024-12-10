@@ -10,3 +10,13 @@ exports.authenticateAdminToken = (req, res, next) => {
     next();
   });
 };
+
+exports.authorizeRole= (...allowedRoles) =>{
+  return (req, res, next) => {
+      const userRole = req.admin.role; // Assuming req.user.role contains the user's role
+      if (!allowedRoles.includes(userRole)) {
+          return res.status(403).json({ message: "Access denied" });
+      }
+      next();
+  };
+}
