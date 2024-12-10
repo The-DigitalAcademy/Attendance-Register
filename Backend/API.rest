@@ -46,3 +46,6 @@ Content-Type: application/json
   "employeeNumber": "S12348",
   "geolocation": "{\"latitude\":40.7128,\"longitude\":-74.0060}"
 }
+
+### Get Learner by Employee number ###1
+GET http://localhost:35050/learner/S12348 HTTP/1/1
