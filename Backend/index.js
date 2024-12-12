@@ -16,9 +16,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Routes
-app.use('v1/admins', adminRoutes);
-app.use('v1/learners', learnerRoutes);
-app.use('v1/programmes',programmeRoutes);
+app.use('/v1/admins', adminRoutes);
+app.use('/v1/learners', learnerRoutes);
+app.use('/v1/programmes',programmeRoutes);
 
 
 // Error handling middleware
