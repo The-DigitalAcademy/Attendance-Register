@@ -72,3 +72,49 @@ exports.updateAdminRole =  async (req, res) => {
     res.status(500).json({ message: 'Error updating role', error });
   }
 }
+
+exports.adminDashboard = async (req, res) => {
+  try {
+    const { active } = req.query; // Read `active` parameter from query string (e.g., ?active=true)
+    
+    // Convert the query string to a boolean, default to `true` if `active` is not provided
+    const isActive = active === 'true'; // Query parameters are strings, so we check for 'true'
+    
+    // Fetch learners who are active in the programme
+    const activeLearners = await prisma.learner.findMany({
+      where: {
+        isActive: true // Filtering based on the isActive boolean field
+      },
+    });
+    const inActiveLearners = await prisma.learner.findMany({
+      where: {
+        isActive: false // Filtering based on the isActive boolean field
+      },
+    });
+    // Fetch all programmes 
+    const programmes = await prisma.programme.findMany();
+    // Fetch all admins
+    const admins = await prisma.admin.findMany();
+
+    // Return a list of all data
+    res.json({
+      //allLearners: allLearners,
+      totalLearners: activeLearners? activeLearners.length : 0,
+      activeLearners: activeLearners,
+      totalActiveLearners: activeLearners.length,
+      inActiveLearners: inActiveLearners,
+      allProgrammes: programmes,
+      totalProgrammes: programmes ? programmes.length : 0,
+      allAdmins: admins,
+      totalAdmins: admins ? admins.length : 0,
+    });
+    
+  } catch (error) {
+    console.error("Error fetching admin dashboard data:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch dashboard data",
+      error: error.message,
+    });
+  }
+}
