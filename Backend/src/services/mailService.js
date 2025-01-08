@@ -22,13 +22,17 @@ const compileTemplate = (templateName, data) => {
 
 exports.sendActivationEmail = async (email, adminId) => {
   const link = `${process.env.APP_URL}/activate/${adminId}`;
-  const html = compileTemplate('activationEmail.hbs', { link });
+  const html = compileTemplate('activationEmail.hbs', { email, link });
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: email,
     subject: 'Activate Your Account',
     html,
+    email,
+    context: {
+        email,
+      },
   });
 };
 

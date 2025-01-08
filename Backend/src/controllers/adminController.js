@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mailService = require('../services/mailService');
 
+// Register an admin
 exports.registerAdmin = async (req, res) => {
   const { email, password, role } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -15,12 +16,13 @@ exports.registerAdmin = async (req, res) => {
     // Send activation email
     await mailService.sendActivationEmail(email, admin.id);
 
-    res.json({ message: 'Admin registered', admin });
+    res.json({ message: 'Admin registered successfully', admin });
   } catch (error) {
     res.status(400).json({ message: 'Error registering admin', error });
   }
 };
 
+// Login an admin
 exports.loginAdmin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -34,5 +36,36 @@ exports.loginAdmin = async (req, res) => {
     res.json({ message: 'Login successful', token });
   } catch (error) {
     res.status(500).json({ message: 'Error logging in', error });
+  }
+};
+
+// Update an admin role
+exports.updateRole = async (req, res, next) => {
+  const { id } = req.params;
+  const { role } = req.body;
+
+  if (!role) {
+    return res.status(400).json({ message: 'Role is required' });
+  }
+
+  try {
+    const updatedAdmin = await prisma.admin.update({
+      where: { id: parseInt(id, 10) },
+      data: { role },
+    });
+
+    res.json({ message: 'Admin role updated successfully', updatedAdmin });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Fetch all admins
+exports.getAdmins = async (req, res) => {
+  try {
+    const admins = await prisma.admin.findMany();
+    res.json(admins);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching admins', error });
   }
 };
