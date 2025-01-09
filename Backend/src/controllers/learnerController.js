@@ -1,4 +1,5 @@
 const prisma = require('../models/prisma');
+const mailService = require('../services/mailService');
 
 exports.createLearner = async (req, res) => {
   const { employeeNumber, name, surname, email, contactNo, emergencyNo, cohort, geolocation } = req.body;
@@ -7,6 +8,7 @@ exports.createLearner = async (req, res) => {
     const learner = await prisma.learner.create({
       data: { employeeNumber, name, surname, email, contactNo, emergencyNo, cohort, geolocation },
     });
+    await mailService.onbordedEmail(email, learner.id, name, surname);
     res.json({ message: 'Learner created', learner });
   } catch (error) {
     res.status(400).json({ message: 'Error creating learner', error });

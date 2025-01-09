@@ -2,6 +2,9 @@ const prisma = require('../models/prisma');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mailService = require('../services/mailService');
+const { getTimeRange } = require('../utils/helpers');
+const { generatePDF, generateCSV } = require('../services/reportService');
+
 
 exports.registerAdmin = async (req, res) => {
   const { email, password, role } = req.body;
@@ -109,3 +112,51 @@ exports.adminDashboard = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch dashboard data', error: error.message });
   }
 };
+
+
+exports.generateReport = async (req, res) => {
+  try {
+    const { reportType, format } = req.body;
+
+    // Validate inputs
+    if (!['daily', 'weekly', 'monthly'].includes(reportType)) {
+        return res.status(400).json({ error: 'Invalid report type' });
+    }
+    if (!['pdf', 'csv'].includes(format)) {
+        return res.status(400).json({ error: 'Invalid format' });
+    }
+    
+    // Fetch attendance data based on reportType
+    const timeRange = getTimeRange(reportType); // Implement this helper function
+    const attendanceData = await prisma.attendance.findMany({
+        where: {
+            checkinAt: {
+                gte: timeRange.start,
+                lte: timeRange.end,
+            },
+        },
+        include: {
+            learner: true,
+        },
+    });
+    console.log("Attendance Data:", attendanceData);
+    // Generate the report
+    let report;
+    if (format === 'pdf') {
+   
+      return generatePDF(attendanceData, res, reportType); // Send PDF file
+    } else if (format === 'csv') {
+      report = generateCSV(attendanceData, reportType);
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="attendance-report.csv"');
+      return res.status(200).send(report); // Send CSV file
+    }
+
+    // Send the generated report
+    res.setHeader('Content-Disposition', `attachment; filename=attendance-report.${format}`);
+    res.send(report);
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while generating the report' });
+}
+}
