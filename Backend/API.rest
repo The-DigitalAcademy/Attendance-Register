@@ -1,5 +1,5 @@
 ### Admin register ##
-POST https://attendance-register-bpp3.onrender.com/auth/admin/register 
+POST https://attendance-register-bpp3.onrender.com/auth/admin/register  HTTP/1.1
 Host: https://attendance-register-bpp3.onrender.com
 Content-Type: application/json
 {
