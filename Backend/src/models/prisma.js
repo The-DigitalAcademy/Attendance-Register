@@ -6,8 +6,8 @@ try{
   const programme= await prisma.programme.create({
 
   data: {
-    name: "Test Programme",
-    cohort: "2024",
+    name: "Full Stack",
+    cohort: "Fiji",
     active: true,
     totalLearners: 50,
     startDate: new Date("2024-01-01"),

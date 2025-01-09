@@ -7,7 +7,7 @@ exports.createLearner = async (req, res) => {
     const learner = await prisma.learner.create({
       data: { employeeNumber, name, surname, email, contactNo, emergencyNo, cohort, geolocation },
     });
-    res.json({ message: 'Learner created', learner });
+    res.json({ message: 'Learner created', learner  });
   } catch (error) {
     res.status(400).json({ message: 'Error creating learner', error });
   }
@@ -17,9 +17,25 @@ exports.createLearner = async (req, res) => {
 exports.getLearners = async (req, res) => {
   try {
     const learners = await prisma.learner.findMany();
+    if (!learners || learners.length === 0) {
+      return res.status(404).json({ message: 'No learners found' });
+    }
     res.json(learners);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching learners', error });
+    console.error("Error details:", error); 
+
+    let errorMessage = 'Unknown error occurred';
+    if (error) {
+      errorMessage = error.message || 'Error object has no message property';
+      if (error.stack) {
+        console.error("Error stack trace:", error.stack); 
+      }
+    } 
+
+    res.status(500).json({ 
+      message: 'Error fetching learners', 
+      details: errorMessage 
+    }); 
   }
 };
 
