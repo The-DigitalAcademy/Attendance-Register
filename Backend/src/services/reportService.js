@@ -17,7 +17,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return R * c; // Distance in meters
 };
 
-// Predefined office location coordinates  -26.186049224968382, 28.018738438626944
+// shaper office location coordinates  -26.186049224968382, 28.018738438626944
 const officeLat = -26.186049224968382; 
 const officeLon = 28.018738438626944; 
 
@@ -39,7 +39,7 @@ const generatePDF = (data, res, reportType) => {
     data.forEach((record) => {
         const location = JSON.parse(record.geolocation);
         const distance = calculateDistance(location.latitude, location.longitude, officeLat, officeLon);
-        const onSite = distance <= 120 ? 'YES - SHAPER OFFICE' : 'NO';
+        const onSite = distance <= 120 ? 'Onsite - Shaper Office' : 'Remote';
 
         doc.fontSize(12).text(`Learner Name: ${record.learner.name}`);
         doc.text(`Learner ID: ${record.learner.id}`);
@@ -73,10 +73,10 @@ const generateCSV = (data, reportType) => {
             const location = JSON.parse(row.geolocation);
             return `Lat: ${location.latitude}, Long: ${location.longitude}`;
         }},
-        { label: 'On Site', value: (row) => {
+        { label: 'Location', value: (row) => {
             const location = JSON.parse(row.geolocation);
             const distance = calculateDistance(location.latitude, location.longitude, officeLat, officeLon);
-            return distance <= 120 ? 'YES - SHAPER OFFICE' : 'NO';
+            return distance <= 120 ? 'On Site - Shaper Office' : 'Remote';
         }},
         { label: 'Checked In Late', value: (row) => {
             const checkinTime = new Date(row.checkinAt).toLocaleTimeString();

@@ -128,10 +128,10 @@ async function getTotalSessions() {
 
     // Step 2: Filter out weekends and public holidays
     const workingDays = uniqueWorkingDays.filter((attendance) => {
-      const checkinAt = new Date(attendance.checkinAt).toISOString().split('T')[0]; // Extract date part (YYYY-MM-DD)
+      const checkinDate = new Date(attendance.checkinAt).toISOString().split('T')[0]; // Extract date part (YYYY-MM-DD)
 
-      const isHoliday = publicHolidays.includes(checkinAt); // Check if it's a public holiday
-      const isWeekendDay = isWeekend(checkinAt); // Check if it's a weekend (Saturday or Sunday)
+      const isHoliday = publicHolidays.includes(checkinDate); // Check if it's a public holiday
+      const isWeekendDay = isWeekend(checkinDate); // Check if it's a weekend (Saturday or Sunday)
 
       return !isHoliday && !isWeekendDay; // Only keep working days (not public holidays or weekends)
     });
