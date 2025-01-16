@@ -2,11 +2,11 @@ const prisma = require('../models/prisma');
 const mailService = require('../services/mailService');
 
 exports.createLearner = async (req, res) => {
-  const { employeeNumber, name, surname, email, contactNo, emergencyNo, cohort, geolocation } = req.body;
+  const { employeeNumber, name, surname, email, contactNo, emergencyNo, description, geolocation } = req.body;
 
   try {
     const learner = await prisma.learner.create({
-      data: { employeeNumber, name, surname, email, contactNo, emergencyNo, cohort, geolocation },
+      data: { employeeNumber, name, surname, email, contactNo, emergencyNo, description, geolocation },
     });
 
     await mailService.onbordedEmail(email, learner.id, name, surname);
@@ -57,7 +57,7 @@ exports.getLearnerByEmpNo= async(req, res)=>{
 exports.getLearnerAttendance = async (req, res) => {
   const { employeeNumber } = req.params;
   try {
-    // Fetch total expected check-ins for the cohort/program
+    // Fetch total expected check-ins for the description/program
     const learner = await prisma.learner.findUnique({
       where: { employeeNumber },
       include: { programme: true }, // Assuming learner is related to a program
@@ -76,7 +76,7 @@ exports.getLearnerAttendance = async (req, res) => {
     res.json({
       learner: {
         name: `${learner.name} ${learner.surname}`,
-        cohort: learner.cohort,
+        description: learner.description,
       },
       totalCheckins: checkins,
       missedCheckins: missedCheckins > 0 ? missedCheckins : 0, // Avoid negative values
@@ -125,7 +125,7 @@ exports.learnerCheckin= async (req, res) => {
           connect: { employeeNumber },  // Connect learner via employeeNumber
         },
         programme: {
-          connect: { cohort: learner.cohort },  // Connect programme via cohort
+          connect: { description: learner.description },  // Connect programme via description
         },
       },
     });
@@ -171,11 +171,11 @@ exports.getLearnerAttendByMonth=  async (req, res) => {
 }
 
 exports.updateLearnerByEmpNo =async (req, res) => {
-  const { employeeNumber, name, surname, image, cohort, geolocation } = req.body;
+  const { employeeNumber, name, surname, image, description, geolocation } = req.body;
   try {
     const learner = await prisma.learner.update({
       where:  {employeeNumber: employeeNumber},
-      data: { employeeNumber, name, surname, image, cohort, geolocation },
+      data: { employeeNumber, name, surname, image, description, geolocation },
     });
     res.json(learner);
   } catch (error) {

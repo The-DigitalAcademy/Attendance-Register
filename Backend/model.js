@@ -3,14 +3,14 @@ const prisma = new PrismaClient({
   log: ['query', 'info', 'warn', 'error'], // Enable detailed logging
 });
 
-//Ensure Cohort Exists
+//Ensure description Exists
 async function createProgramme() {
 try{
   const programme= await prisma.programme.create({
 
   data: {
     name: "Test Programme",
-    cohort: "2024",
+    description: "2024",
     active: true,
     totalLearners: 50,
     startDate: new Date("2024-01-01"),
@@ -37,7 +37,7 @@ async function createLearners() {
           contactNo: "000-223-2232",
           emergencyNo: "000-303-2030",
           image: "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg",
-          cohort: "2024",
+          description: "2024",
           geolocation: '{"latitude":40.7128,"longitude":-74.0060}',
           isActive: true,
         },
@@ -49,7 +49,7 @@ async function createLearners() {
           contactNo: "000-223-2233",
           emergencyNo: "000-303-2031",
           image: "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg",
-          cohort: "2024",
+          description: "2024",
           geolocation: '{"latitude":40.7129,"longitude":-74.0059}',
           isActive: true,
         },
@@ -61,7 +61,7 @@ async function createLearners() {
           contactNo: "000-223-2234",
           emergencyNo: "000-303-2032",
           image: "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg",
-          cohort: "2024",
+          description: "2024",
           geolocation: '{"latitude":40.7130,"longitude":-74.0058}',
           isActive: true,
         },
@@ -73,7 +73,7 @@ async function createLearners() {
           contactNo: "000-223-2235",
           emergencyNo: "000-303-2033",
           image: "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg",
-          cohort: "2024",
+          description: "2024",
           geolocation: '{"latitude":40.7131,"longitude":-74.0057}',
           isActive: true,
         },
