@@ -16,7 +16,7 @@ exports.registerAdmin = async (req, res) => {
       data: { email, password: hashedPassword, role: role || 'admin' },
     });
 
-    await mailService.sendActivationEmail(email, admin.id);
+    //await mailService.sendActivationEmail(email, admin.id);
 
     res.status(201).json({ message: 'Admin registered successfully', admin });
   } catch (error) {
