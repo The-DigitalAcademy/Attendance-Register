@@ -3,14 +3,14 @@ const prisma = require('../models/prisma');
 
 
 exports.createProgramme = async(req, res) =>{
-  const { name, cohort, active,  startDate, endDate,} = req.body
+  const { name, description, active,  startDate, endDate,} = req.body
     try{
       const programme= await prisma.programme.create({
-      data: { name, cohort, active,  startDate, endDate} , 
+      data: { name, description, active,  startDate, endDate} , 
     });
-    res.json({message: "Programe created  with Cohort ", programme})
+    res.json({message: "Programe created  with description ", programme})
     } catch (error) {
-        res.status(401).json({message: "Error cannot create cohort", programme})
+        res.status(401).json({message: "Error cannot create description", programme})
     }
     }
 

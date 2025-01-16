@@ -24,18 +24,18 @@ model Learner {
   contactNo      String
   email          String
   emergencyNo    String
-  cohort         String
+  description         String
   date           DateTime     @default(now())
   geolocation    String
   attendance     Attendance[]
-  programme      Programme    @relation(fields: [cohort], references: [cohort])
+  programme      Programme    @relation(fields: [description], references: [description])
   isActive       Boolean @default(true)
 }
 
 model Programme {
   id            Int          @id @default(autoincrement())
   name          String
-  cohort        String       @unique
+  description        String       @unique
   active        Boolean      @default(true)
   endDate       DateTime
   startDate     DateTime
@@ -47,9 +47,9 @@ model Programme {
 model Attendance {
   id             Int       @id @default(autoincrement())
   employeeNumber String
-  cohort         String
+  description         String
   geolocation    String
   checkinAt      DateTime
-  programme      Programme @relation(fields: [cohort], references: [cohort])
+  programme      Programme @relation(fields: [description], references: [description])
   learner        Learner   @relation(fields: [employeeNumber], references: [employeeNumber])
 }
