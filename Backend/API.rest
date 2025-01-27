@@ -1,5 +1,7 @@
 ### Admin register ##
-POST https://attendance-register-bpp3.onrender.com/auth/admin/register content-type: application/json
+POST https://attendance-register-bpp3.onrender.com/auth/admin/register  HTTP/1.1
+Host: https://attendance-register-bpp3.onrender.com
+Content-Type: application/json
 {
   "email": "admin@example.com",
   "password": "secure_password",
@@ -7,7 +9,10 @@ POST https://attendance-register-bpp3.onrender.com/auth/admin/register content-t
 }
 
 #### Admin login ###
-POST https://attendance-register-bpp3.onrender.com/auth/admin/login  content-type: application/json
+POST https://attendance-register-bpp3.onrender.com/auth/admin/login  HTTP/1.1
+Host: https://attendance-register-bpp3.onrender.com
+Content-Type: application/json
+
 {
   "email": "admin1@shaper.co.za",
   "password": "Admin@1001"
@@ -17,6 +22,9 @@ POST https://attendance-register-bpp3.onrender.com/auth/admin/login  content-typ
 
 ### Admin create a user with admin Auth Token ###
 POST http://localhost:35050/admin/create
+Host: localhost:35050
+Content-Type: application/json
+
 {
   "employeeNumber": "S1234ee4",
   "name": "Jane",
@@ -35,6 +43,9 @@ Host: localhost:35050
 Content-Type: application/json
 
 {
-  "employeeNumber": "S12345",
+  "employeeNumber": "S12348",
   "geolocation": "{\"latitude\":40.7128,\"longitude\":-74.0060}"
 }
+
+### Get Learner by Employee number ###1
+GET http://localhost:35050/learner/S12348 HTTP/1/1

@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const handlebars = require('handlebars');
 const fs = require('fs');
 const path = require('path');
-const { env } = require('dotenv');
+require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -11,8 +11,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
-console.log("sss", this.auth);
-// console.log(env('EMAIL_USER'))
+
 const compileTemplate = (templateName, data) => {
   const templatePath = path.join(__dirname, '../templates', templateName);
   const templateSource = fs.readFileSync(templatePath, 'utf8');
@@ -22,7 +21,7 @@ const compileTemplate = (templateName, data) => {
 
 exports.sendActivationEmail = async (email, adminId) => {
   const link = `${process.env.APP_URL}/activate/${adminId}`;
-  const html = compileTemplate('activationEmail.hbs', { link });
+  const html = compileTemplate('activationEmail.hbs', { email, link });
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
@@ -32,4 +31,13 @@ exports.sendActivationEmail = async (email, adminId) => {
   });
 };
 
-
+exports.onbordedEmail = async (email, learnerId, name, surname) => {
+  const html = compileTemplate('learnerOnboardedEmail.hbs', { email, learnerId, name, surname });
+  console.log('learnerId', learnerId);
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Onboarded To Attendance Register',
+    html,
+  });
+};

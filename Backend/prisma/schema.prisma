@@ -18,28 +18,27 @@ model Admin {
 model Learner {
   id             Int          @id @default(autoincrement())
   employeeNumber String       @unique
-  name           String
-  surname        String
+  firstname      String
+  lastname       String
   image          String?
   contactNo      String
   email          String
   emergencyNo    String
-  cohort         String
+  description    String
   date           DateTime     @default(now())
   geolocation    String
   attendance     Attendance[]
-  programme      Programme    @relation(fields: [cohort], references: [cohort])
+  programme      Programme    @relation(fields: [description], references: [description])
   isActive       Boolean @default(true)
 }
 
 model Programme {
   id            Int          @id @default(autoincrement())
   name          String
-  cohort        String       @unique
+  description        String       @unique
   active        Boolean      @default(true)
   endDate       DateTime
   startDate     DateTime
-  totalLearners Int          @default(0)
   attendance    Attendance[]
   learners      Learner[]
 }
@@ -47,9 +46,9 @@ model Programme {
 model Attendance {
   id             Int       @id @default(autoincrement())
   employeeNumber String
-  cohort         String
+  description         String
   geolocation    String
   checkinAt      DateTime
-  programme      Programme @relation(fields: [cohort], references: [cohort])
+  programme      Programme @relation(fields: [description], references: [description])
   learner        Learner   @relation(fields: [employeeNumber], references: [employeeNumber])
 }
