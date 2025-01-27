@@ -90,7 +90,7 @@ async function createLearners() {
 async function createAdmins() {
   try {
     // Define the plain-text password
-    const plainPassword = "Admin@1001";
+    const plainPassword = "@dmin@dmin@shaper@1001";
 
     // Generate a salt and hash the password
     const saltRounds = 10; // Adjust the cost factor as needed
@@ -99,7 +99,7 @@ async function createAdmins() {
     // Create the admin with the hashed password
     const administrator = await prisma.admin.create({
       data: {
-        email: "admin@shaper.co.za",
+        email: "superadmin@shaper.co.za",
         password: hashedPassword, // Store the hashed password
         role: "super_admin", // Optional, defaults to "admin"
       },

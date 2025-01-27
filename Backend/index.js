@@ -5,7 +5,7 @@ const adminRoutes = require('./src/routes/adminRoutes');
 const learnerRoutes = require('./src/routes/learnerRoutes');
 const programmeRoutes= require('./src/routes/programmeRoute')
 const { authenticateAdminToken, authorizeRole } = require('./src/middleware/authMiddleware');
-const prisma = require("./model")
+const prisma = require("./src/models/prisma")
 const app = express();
 
 // Middleware
