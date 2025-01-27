@@ -18,13 +18,13 @@ model Admin {
 model Learner {
   id             Int          @id @default(autoincrement())
   employeeNumber String       @unique
-  name           String
-  surname        String
+  firstname      String
+  lastname       String
   image          String?
   contactNo      String
   email          String
   emergencyNo    String
-  description         String
+  description    String
   date           DateTime     @default(now())
   geolocation    String
   attendance     Attendance[]
@@ -39,7 +39,6 @@ model Programme {
   active        Boolean      @default(true)
   endDate       DateTime
   startDate     DateTime
-  totalLearners Int          @default(0)
   attendance    Attendance[]
   learners      Learner[]
 }

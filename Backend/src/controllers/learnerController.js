@@ -2,14 +2,14 @@ const prisma = require('../models/prisma');
 const mailService = require('../services/mailService');
 
 exports.createLearner = async (req, res) => {
-  const { employeeNumber, name, surname, email, contactNo, emergencyNo, description, geolocation } = req.body;
+  const { employeeNumber,firstname, lastname, email, contactNo, emergencyNo, description, geolocation } = req.body;
 
   try {
     const learner = await prisma.learner.create({
-      data: { employeeNumber, name, surname, email, contactNo, emergencyNo, description, geolocation },
+      data: { employeeNumber,firstname, lastname, email, contactNo, emergencyNo, description, geolocation },
     });
 
-    await mailService.onbordedEmail(email, learner.id, name, surname);
+    await mailService.onbordedEmail(email, learner.id,firstname, lastname);
     res.json({ message: 'Learner created', learner });
 
   } catch (error) {
@@ -75,7 +75,7 @@ exports.getLearnerAttendance = async (req, res) => {
     const missedCheckins = totalExpectedSessions - checkins;
     res.json({
       learner: {
-        name: `${learner.name} ${learner.surname}`,
+       firstname: `${learner.name} ${learner.lastname}`,
         description: learner.description,
       },
       totalCheckins: checkins,
@@ -171,11 +171,11 @@ exports.getLearnerAttendByMonth=  async (req, res) => {
 }
 
 exports.updateLearnerByEmpNo =async (req, res) => {
-  const { employeeNumber, name, surname, image, description, geolocation } = req.body;
+  const { employeeNumber,firstname, lastname, image, description, geolocation } = req.body;
   try {
     const learner = await prisma.learner.update({
       where:  {employeeNumber: employeeNumber},
-      data: { employeeNumber, name, surname, image, description, geolocation },
+      data: { employeeNumber,firstname, lastname, image, description, geolocation },
     });
     res.json(learner);
   } catch (error) {

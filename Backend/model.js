@@ -12,7 +12,6 @@ try{
     name: "Test Programme",
     description: "2024",
     active: true,
-    totalLearners: 50,
     startDate: new Date("2024-01-01"),
     endDate: new Date("2025-12-31"),
   },
@@ -31,8 +30,8 @@ async function createLearners() {
       data: [
         {
           employeeNumber: "S12345",
-          name: "John",
-          surname: "Doe",
+          firstname: "John",
+          lastname: "Doe",
           email: "johndoe@shaper.co.za",
           contactNo: "000-223-2232",
           emergencyNo: "000-303-2030",
@@ -43,8 +42,8 @@ async function createLearners() {
         },
         {
           employeeNumber: "S12346",
-          name: "Jane",
-          surname: "Doe",
+          firstname: "Jane",
+          lastname: "Doe",
           email: "janedoe@shaper.co.za",
           contactNo: "000-223-2233",
           emergencyNo: "000-303-2031",
@@ -55,8 +54,8 @@ async function createLearners() {
         },
         {
           employeeNumber: "S12347",
-          name: "Bob",
-          surname: "Doe",
+          firstname: "Bob",
+          lastname: "Doe",
           email: "bobdoe@shaper.co.za",
           contactNo: "000-223-2234",
           emergencyNo: "000-303-2032",
@@ -67,8 +66,8 @@ async function createLearners() {
         },
         {
           employeeNumber: "S12348",
-          name: "Janet",
-          surname: "Doe",
+          firstname: "Janet",
+          lastname: "Doe",
           email: "janetdoe@shaper.co.za",
           contactNo: "000-223-2235",
           emergencyNo: "000-303-2033",
