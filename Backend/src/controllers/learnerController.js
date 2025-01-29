@@ -75,7 +75,7 @@ exports.getLearnerAttendance = async (req, res) => {
     const missedCheckins = totalExpectedSessions - checkins;
     res.json({
       learner: {
-       firstname: `${learner.name} ${learner.lastname}`,
+       firstname: `${learner.firstname} ${learner.lastname}`,
         description: learner.description,
       },
       totalCheckins: checkins,
