@@ -3,6 +3,56 @@
 A Node.js backend application built with Express and Prisma to manage admins, learners, and their attendance data. This system supports authentication, role-based access control, and CRUD operations for managing learners, programs, and attendance records.
 
 # Features
+
+# Directory structure:
+```
+└── the-digitalacademy-attendance-register/
+    ├── README.md
+    ├── Backend/
+    │   ├── API.rest
+    │   ├── Dockerfile
+    │   ├── index.js
+    │   ├── model.js
+    │   ├── package-lock.json
+    │   ├── package.json
+    │   ├── yarn.lock
+    │   ├── .gitignore
+    │   ├── prisma/
+    │   │   ├── schema.prisma
+    │   │   └── migrations/
+    │   │       ├── migration_lock.toml
+    │   │       └── 20241128070129_init/
+    │   │           └── migration.sql
+    │   └── src/
+    │       ├── controllers/
+    │       │   ├── adminController.js
+    │       │   ├── learnerController.js
+    │       │   ├── programmeController.js
+    │       │   └── registerController.js
+    │       ├── middleware/
+    │       │   └── authMiddleware.js
+    │       ├── models/
+    │       │   └── prisma.js
+    │       ├── routes/
+    │       │   ├── adminRoutes.js
+    │       │   ├── learnerRoutes.js
+    │       │   └── programmeRoute.js
+    │       ├── services/
+    │       │   ├── mailService.js
+    │       │   └── reportService.js
+    │       ├── templates/
+    │       │   ├── activateAccountAdmin.hbs
+    │       │   ├── activationEmail.hbs
+    │       │   ├── adminActivation.hbs
+    │       │   └── learnerOnboardedEmail.hbs
+    │       └── utils/
+    │           └── helpers.js
+    └── .github/
+        └── workflows/
+            └── main_attendanceregisterbackend.yml
+
+```
+
 # Admin Management
 Admin Registration: Add new admins with hashed passwords. \
 Admin Login: Authenticate admins and issue JWT tokens.\
