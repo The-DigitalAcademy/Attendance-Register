@@ -5,13 +5,13 @@ const { authenticateAdminToken, authorizeRole } = require('../middleware/authMid
 const router = express.Router();
 
 
-router.get('/all',authenticateAdminToken, authorizeRole('admin', 'super_admin') ,getLearners);
-router.get('/learner/:employeeNumber', authenticateAdminToken, authorizeRole('admin', 'super_admin'),getLearnerByEmpNo);
+router.get('/all' ,getLearners);
+router.get('/learner/:employeeNumber',getLearnerByEmpNo);
 router.post('/learner/checkin', learnerCheckin)
-router.get('/admin/learner/attendance/:employeeNumber', authenticateAdminToken,authorizeRole('admin', 'super_admin'),  getLearnerAttendance)
-router.get('/learner/:employeeNumber/attendance/:month', authenticateAdminToken, authorizeRole('admin', 'super_admin'), getLearnerAttendByMonth)
-router.post('/newlearner', authenticateAdminToken, authorizeRole('super_admin'), createLearner);
-router.put('/admin/learner/:employeeNumber',  authenticateAdminToken, authorizeRole('super_admin'), updateLearnerByEmpNo)
+router.get('/admin/learner/attendance/:employeeNumber',  getLearnerAttendance)
+router.get('/learner/:employeeNumber/attendance/:month', getLearnerAttendByMonth)
+router.post('/newlearner', createLearner);
+router.put('/admin/learner/:employeeNumber',  updateLearnerByEmpNo)
 // Route to soft delete a learner using employeeNumber
 router.put('/admin/learner/soft-delete/:employeeNumber',  authenticateAdminToken, authorizeRole('super_admin'), softDelete);
 

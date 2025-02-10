@@ -4,10 +4,10 @@ const { authenticateAdminToken, authorizeRole } = require('../middleware/authMid
 
 const router = express.Router();
 
-router.post('/register', authenticateAdminToken, authorizeRole('super_admin') , registerAdmin);
+router.post('/register', registerAdmin); 
 router.post('/admin/login', loginAdmin);
-router.get('/admin/all',authenticateAdminToken, authorizeRole('super_admin') , getAdmins)
-router.put('/admin/role/:id', authenticateAdminToken, authorizeRole('super_admin'),updateAdminRole)
-router.get('/admin/dashboard', authenticateAdminToken, authorizeRole('admin', 'super_admin'), adminDashboard)
-router.post('/generate-report', authenticateAdminToken, generateReport);
+router.get('/admin/all', getAdmins)
+router.put('/admin/role/:id', updateAdminRole)
+router.get('/admin/dashboard', adminDashboard)
+router.post('/generate-report', generateReport);
 module.exports = router;
