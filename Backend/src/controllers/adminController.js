@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const mailService = require('../services/mailService');
 const { getTimeRange } = require('../utils/helpers');
 const { generatePDF, generateCSV } = require('../services/reportService');
-
+const logger = require('../utils/logger'); 
 
 exports.registerAdmin = async (req, res) => {
   const { email, password, role } = req.body;
@@ -20,7 +20,7 @@ exports.registerAdmin = async (req, res) => {
 
     res.status(201).json({ message: 'Admin registered successfully', admin });
   } catch (error) {
-    console.error('Error registering admin:', error);
+    logger.error('Error registering admin:', error);
     res.status(400).json({ message: 'Error registering admin', error: error.message });
   }
 };
@@ -42,7 +42,7 @@ exports.loginAdmin = async (req, res) => {
 
     res.json({ message: 'Login successful', token });
   } catch (error) {
-    console.error('Error logging in:', error);
+    logger.error('Error logging in:', error);
     res.status(500).json({ message: 'Error logging in', error: error.message });
   }
 };
@@ -52,7 +52,7 @@ exports.getAdmins = async (req, res) => {
     const admins = await prisma.admin.findMany();
     res.json({ admins });
   } catch (error) {
-    console.error('Error fetching admins:', error);
+    logger.error('Error fetching admins:', error);
     res.status(500).json({ message: 'Error fetching admins', error: error.message });
   }
 };
@@ -64,7 +64,7 @@ exports.deleteAdmin = async (req, res) => {
     await prisma.admin.delete({ where: { id: parseInt(id, 10) } });
     res.json({ message: 'Admin deleted successfully' });
   } catch (error) {
-    console.error('Error deleting admin:', error);
+    logger.error('Error deleting admin:', error);
     res.status(500).json({ message: 'Error deleting admin', error: error.message });
   }
 };
@@ -80,7 +80,7 @@ exports.updateAdminRole = async (req, res) => {
     });
     res.json({ message: 'Admin role updated successfully', updatedAdmin });
   } catch (error) {
-    console.error('Error updating admin role:', error);
+    logger.error('Error updating admin role:', error);
     res.status(500).json({ message: 'Error updating role', error: error.message });
   }
 };
@@ -108,7 +108,7 @@ exports.adminDashboard = async (req, res) => {
       totalAdmins: admins.length,
     });
   } catch (error) {
-    console.error('Error fetching admin dashboard data:', error);
+    logger.error('Error fetching admin dashboard data:', error);
     res.status(500).json({ message: 'Failed to fetch dashboard data', error: error.message });
   }
 };
@@ -139,7 +139,7 @@ exports.generateReport = async (req, res) => {
             learner: true,
         },
     });
-    console.log("Attendance Data:", attendanceData);
+    logger.info("Attendance Data:", attendanceData);
     // Generate the report
     let report;
     if (format === 'pdf') {
@@ -156,7 +156,7 @@ exports.generateReport = async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename=attendance-report.${format}`);
     res.send(report);
 } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'An error occurred while generating the report' });
 }
 }

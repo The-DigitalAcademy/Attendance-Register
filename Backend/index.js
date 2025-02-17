@@ -7,7 +7,7 @@ const programmeRoutes= require('./src/routes/programmeRoute')
 const { authenticateAdminToken, authorizeRole } = require('./src/middleware/authMiddleware');
 const prisma = require("./src/models/prisma")
 const app = express();
-
+const logger = require('./src/utils/logger'); 
 // Middleware
 app.use(express.json());0
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +23,7 @@ app.use('/v1/programmes',programmeRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  logger.error(err.stack);
   res.status(500).json({ message: 'Something went wrong!', error: err });
 });
 
@@ -31,5 +31,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 35050;
 app.listen(PORT, () => {
   
-  console.log(`Server running on http://localhost:${PORT}`);
+  logger.info(`Server running on http://localhost:${PORT}`);
 });

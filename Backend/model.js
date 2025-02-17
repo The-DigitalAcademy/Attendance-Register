@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({
   log: ['query', 'info', 'warn', 'error'], // Enable detailed logging
 });
+const logger = require('./src/utils/logger'); 
 
 //Ensure description Exists
 async function createProgramme() {
@@ -17,9 +18,9 @@ try{
   },
    
 });
-console.log(programme)
+logger.info(programme)
 } catch (error) {
-  console.error("Error creating Programme:", error);
+  logger.error("Error creating Programme:", error);
 }
 }
 
@@ -80,9 +81,9 @@ async function createLearners() {
       skipDuplicates: true, // Prevents duplication errors if records already exist
     });
 
-    console.log("Learners created:", learners);
+    logger.info("Learners created:", learners);
   } catch (error) {
-    console.error("Error creating learners:", error);
+    logger.error("Error creating learners:", error);
   }
 }
 
@@ -97,9 +98,9 @@ async function createAdmins() {
         role: "super_admin", // Optional, defaults to "admin"
       },
     });
-    console.log("Admin created:", administrator);
+    logger.info("Admin created:", administrator);
   } catch (error) {
-    console.error("Error creating admin:", error);
+    logger.error("Error creating admin:", error);
   }
 }
 
@@ -145,15 +146,15 @@ async function getTotalSessions() {
     const totalSessions = await prisma.attendance.count();
 
     // Log the results for debugging
-    console.log("Total working days:", totalWorkingDays);
-    console.log("Total sessions:", totalSessions);
+    logger.info("Total working days:", totalWorkingDays);
+    logger.info("Total sessions:", totalSessions);
 
     return {
       totalWorkingDays,
       totalSessions,
     };
   } catch (error) {
-    console.error("Error calculating sessions:", error);
+    logger.error("Error calculating sessions:", error);
   }
 }
 
@@ -164,7 +165,7 @@ async function main() {
   await createAdmins();
   await createLearners();
  getTotalSessions().then(result => {
-  console.log("Result:", result);
+  logger.info("Result:", result);
 });
 }
 
@@ -174,7 +175,7 @@ main()
     await prisma.$disconnect(); // Disconnect Prisma after operations
   })
   .catch(async (error) => {
-    console.error("Error in main function:", error);
+    logger.error("Error in main function:", error);
     await prisma.$disconnect();
     process.exit(1); // Exit with failure
   });

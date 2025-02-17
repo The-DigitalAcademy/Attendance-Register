@@ -1,6 +1,6 @@
 const prisma = require('../models/prisma');
 const mailService = require('../services/mailService');
-
+const logger = require('../utils/logger'); 
 exports.createLearner = async (req, res) => {
   const { employeeNumber,firstname, lastname, email, contactNo, emergencyNo, description, geolocation } = req.body;
 
@@ -26,13 +26,13 @@ exports.getLearners = async (req, res) => {
     }
     res.json(learners);
   } catch (error) {
-    console.error("Error details:", error); 
+    logger.error("Error details:", error); 
 
     let errorMessage = 'Unknown error occurred';
     if (error) {
       errorMessage = error.message || 'Error object has no message property';
       if (error.stack) {
-        console.error("Error stack trace:", error.stack); 
+        logger.error("Error stack trace:", error.stack); 
       }
     } 
 
@@ -82,7 +82,7 @@ exports.getLearnerAttendance = async (req, res) => {
       missedCheckins: missedCheckins > 0 ? missedCheckins : 0, // Avoid negative values
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ message: 'Error fetching attendance data', error });
   }
 }
@@ -131,7 +131,7 @@ exports.learnerCheckin= async (req, res) => {
     });
     return res.status(201).json({ message: 'Check-in successful', checkin });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 };
@@ -165,7 +165,7 @@ exports.getLearnerAttendByMonth=  async (req, res) => {
       })),
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ message: 'Error fetching attendance data', error });
   }
 }
@@ -201,9 +201,9 @@ exports.softDelete = async (req, res) => {
       message: `Learner with Employee Number ${employeeNumber} has been soft deleted.`,
       learner: updatedLearner,
     });
-    console.log(`Learner with Employee Number ${employeeNumber} has been soft deleted.`);
+    logger.info(`Learner with Employee Number ${employeeNumber} has been soft deleted.`);
   } catch (error) {
-    console.error('Error soft deleting learner:', error);
+    logger.error('Error soft deleting learner:', error);
     res.status(500).json({ error: 'Error soft deleting learner' });
   }
 }
