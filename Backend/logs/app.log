@@ -1,0 +1,23 @@
+2025-02-17T10:10:40.332Z [INFO]: Server running on http://localhost:35050
+2025-02-17T10:10:42.861Z [ERROR]: Error creating programme: 
+Invalid `prisma.programme.create()` invocation in
+/Users/thomastemp/Database/Backend/src/models/prisma.js:10:46
+
+   7 // Ensure description exists
+   8 async function createProgramme() {
+   9   try {
+→ 10     const programme = await prisma.programme.create(
+Unique constraint failed on the fields: (`description`)
+2025-02-17T10:10:43.533Z [ERROR]: Error creating admin: 
+Invalid `prisma.admin.create()` invocation in
+/Users/thomastemp/Database/Backend/src/models/prisma.js:57:46
+
+  54 const saltRounds = 10;
+  55 const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+  56 
+→ 57 const administrator = await prisma.admin.create(
+Unique constraint failed on the fields: (`email`)
+2025-02-17T10:10:44.793Z [INFO]: Learners created: 0
+2025-02-17T10:10:46.229Z [INFO]: Total working days: 0
+2025-02-17T10:10:46.230Z [INFO]: Total sessions: 0
+2025-02-17T10:10:46.237Z [INFO]: Database connection closed.

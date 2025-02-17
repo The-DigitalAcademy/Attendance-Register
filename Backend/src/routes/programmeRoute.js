@@ -6,7 +6,7 @@ const {createProgramme, getAllProgrammes}= require('../controllers/programmeCont
 const router= express()
 
 router.post('/new', createProgramme)
-router.get('/all', authenticateAdminToken, authorizeRole('admin', 'super_admin'),getAllProgrammes)
+router.get('/all',getAllProgrammes)
 
 
 module.exports = router;
