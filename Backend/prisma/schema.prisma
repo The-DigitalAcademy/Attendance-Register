@@ -34,8 +34,8 @@ model Learner {
 
 model Programme {
   id            Int          @id @default(autoincrement())
-  name          String
-  description        String       @unique
+  name          String       @unique
+  description   String       @unique
   active        Boolean      @default(true)
   endDate       DateTime
   startDate     DateTime
